@@ -8,7 +8,7 @@ source 'dkr'
 action :build_if_missing
 end
 
-docker_container 'default' do
+docker_container 'pythonapp' do
 repo 'sampleapp'
 volumes '/run/mysql-default:/var/run/mysqld'
 network_mode 'host'
