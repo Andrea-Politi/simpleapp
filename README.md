@@ -1,11 +1,11 @@
 # simpleapp
-Project to create a simple webapp which will extract data from a mysql db using python2.7 + uwsgi + flask and nginx inside a docker container based on ubuntu 16.04, importing a dataset from an external repo, everything deployed via chef-solo
+Project to create a simple webapp which will extract data from a mysql db using python2.7 + uwsgi + flask and nginx inside a docker container based on ubuntu 16.04, importing a dataset from an external repo ( https://github.com/datacharmer/test_db ), everything deployed via chef-solo
 
 INSTALLATION
 
 Clone the repo:
 
-git clone https://github.com/Andrea-Politi/simpleapp
+git clone https://github.com/andrea-politi/simpleapp
 
 Install Chef binaries:
 
@@ -34,6 +34,8 @@ http://<host_IP>:8000
 
 That's it!
 
+NB. THE CONTAINER IS USING THE OPTION: --net="host" SO MAKE SURE YOU HAVE NOT ANYTHING LISTENING ON PORT 8000, 3306
+
 Note1: the app is using Chef to deploy everything, the test was not very clear, it would have been possible to build everything in order to deploy the whole app under Docker, but it seems a bit overkill to me, plus I believe this solution is more elegant.
 
 Note2: the query extract just the values of: 'last_name', 'first_name' and 'emp_no'. Again, the test is not very clear on this point, the "select" statement can be easily changed inside the app.py file (and the docker image rebuilt) to get different results:
@@ -55,3 +57,50 @@ Note3: having the passwd in clear for the mysql user is not that great, anyway i
 
 
 FILES:
+
+cookbooks: it contains the cookbooks for Chef, both internal (dbset,mysqld,docker-build) and external
+
+dkr: it includes the Dockerfile, the pip requirements and the nginx configuration file
+
+sampleapp: is the core directory. It includes the python application file (app.py), the uwsgi config (wsgi.py) and the uwsgi settings file (app.ini). The templates dir includes the flask template
+
+appuser.sql: it will create a simple mysql user with limited permissions to be used by app.py
+
+node.json: it specifies the recipes to run with chef-solo (default: mysqld,dbset,docker-build)
+
+solo.rb: main chef-solo configuration file, needs to be edited and copied under /etc/chef (or specified with the "-c" ocommand line option
+
+TROUBLESHOOT/CONFIG CHANGES/USAGE:
+
+- to connect to mysql from the host:
+
+$ sudo mysql -S /run/mysql-default/mysqld.sock
+
+- to execute a shell inside the container:
+
+$ sudo docker exec -it sampleapp bash
+
+- then to commit:
+
+$ sudo docker commit sampleapp
+
+- to rebuild the image:
+
+$ sudo docker stop pythonapp && sudo docker rm pythonapp
+sudo docker rmi $(docker images -a)
+
+then
+
+$ sudo docker build -t sampleapp . <-- or /path/to/Dockerfile
+
+- to start the container outside chef:
+
+& sudo docker run -d --name pythonapp --net='host' -v /run/mysql-default/:/var/run/mysqld -it sampleapp
+
+- to modify recipes:
+
+$ vim cookbook/whatever/recipes/default.rb
+
+then
+
+$ sudo chef-solo cookbook upload <cookbook_name>
