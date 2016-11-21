@@ -22,6 +22,7 @@ $ sudo cp simpleapp/solo.rb /etc/chef/
 Clone the external cookbooks:
 
 $ cd simpleapp/cookbooks && git clone https://github.com/chef-cookbooks/mysql
+
 $ git clone https://github.com/chef-cookbooks/docker
 
 Launch Chef solo:
