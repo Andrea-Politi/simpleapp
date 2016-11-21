@@ -1,6 +1,0 @@
-[submodule "cookbooks/docker"]
-	path = cookbooks/docker
-	url = https://github.com/chef-cookbooks/docker
-[submodule "cookbooks/mysql"]
-	path = cookbooks/mysql
-	url = https://github.com/chef-cookbooks/mysql
