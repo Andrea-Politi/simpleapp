@@ -4,7 +4,7 @@ end
 
 docker_image 'sampleapp' do
 #tag 'v0.1.0'
-source '/home/andrew/dkr'
+source 'dkr'
 action :build_if_missing
 end
 

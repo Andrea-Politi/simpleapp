@@ -11,6 +11,8 @@ command "cd #{path} && mysql -S /run/mysql-default/mysqld.sock < employees.sql"
 end
 end
 
-#execute "create appuser" do
-#command "mysql -S /run/mysql-default/mysqld.sock < /var/chef/cookbooks/dbset/resources/appuser.sql"
-#end
+
+execute "create appuser" do
+  command "touch /tmp/appuser.lock && mysql -S /run/mysql-default/mysqld.sock < #{Chef::Config['chef_repo_path']}/appuser.sql"
+  not_if "test -f /tmp/appuser.lock"
+end
