@@ -1,7 +1,7 @@
 # simpleapp
 Project to create a simple webapp which will extract data from a mysql db using python2.7 + uwsgi + flask and nginx inside a docker container based on ubuntu 16.04, importing a dataset from an external repo ( https://github.com/datacharmer/test_db ), everything deployed via chef-solo
 
-INSTALLATION
+# INSTALLATION
 
 Clone the repo:
 
@@ -34,7 +34,7 @@ http://host_IP:8000
 
 That's it!
 
-NB. THE CONTAINER IS USING THE OPTION: --net="host" SO MAKE SURE YOU HAVE NOT ANYTHING LISTENING ON PORT 8000, 3306
+# NB. the container is using the option: --net="host" so make sure you do not have anything on ports: 3306, 8000
 
 Note1: the app is using Chef to deploy everything, the test was not very clear, it would have been possible to build everything in order to deploy the whole app under Docker, but it seems a bit overkill to me, plus I believe this solution is more elegant.
 
@@ -55,7 +55,7 @@ mysql> desc employees;
 Note3: having the passwd in clear for the mysql user is not that great, anyway it got just the select grants and can connect only from localhost, so it's not a big issue I believe.
 
 
-FILES:
+# FILES:
 
 cookbooks: it contains the cookbooks for Chef, both internal (dbset,mysqld,docker-build) and external
 
@@ -69,7 +69,7 @@ node.json: it specifies the recipes to run with chef-solo (default: mysqld,dbset
 
 solo.rb: main chef-solo configuration file, needs to be edited and copied under /etc/chef (or specified with the "-c" ocommand line option
 
-TROUBLESHOOT/CONFIG CHANGES/USAGE:
+# TROUBLESHOOT/CONFIG CHANGES/USAGE:
 
 - to connect to mysql from the host:
 
@@ -102,4 +102,4 @@ $ vim cookbook/whatever/recipes/default.rb
 
 then
 
-$ sudo chef-solo cookbook upload <cookbook_name>
+$ sudo chef-solo cookbook upload cookbook_name
