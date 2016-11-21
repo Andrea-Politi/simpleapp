@@ -3,15 +3,15 @@ Project to create a simple webapp which will extract data from a mysql db using 
 
 # INSTALLATION
 
-Clone the repo:
+- Clone the repo:
 
-git clone https://github.com/andrea-politi/simpleapp
+$ git clone https://github.com/andrea-politi/simpleapp
 
-Install Chef binaries:
+- Install Chef binaries:
 
 $ sudo true && curl -L https://www.opscode.com/chef/install.sh | sudo bash
 
-Then edit the 'chef_repo_path' inside the simpleapp/solo.rb with the app path inside your newly created repo (default is: /home/user/git/simpleapp ) and copy it to /etc/chef/solo.rb. Remember to take a backup if already existing:
+- Then edit the 'chef_repo_path' inside the simpleapp/solo.rb with the app path inside your newly created repo (default is: /home/user/git/simpleapp ) and copy it to /etc/chef/solo.rb. Remember to take a backup if already existing:
 
 $ vim simpleapp/solo.rb
 
@@ -19,17 +19,17 @@ Save, then:
 
 $ sudo cp simpleapp/solo.rb /etc/chef/
 
-Clone the external cookbooks:
+- Clone the external cookbooks:
 
 $ cd simpleapp/cookbooks && git clone https://github.com/chef-cookbooks/mysql
 
 $ git clone https://github.com/chef-cookbooks/docker
 
-Launch Chef solo:
+- Launch Chef solo:
 
 $ sudo chef-solo
 
-After is finished, open the browser on your host to:
+- After is finished, open the browser on your host to:
 
 http://host_IP:8000
 
