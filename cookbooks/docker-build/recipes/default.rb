@@ -3,8 +3,7 @@ docker_service 'default' do
 end
 
 docker_image 'sampleapp' do
-#tag 'v0.1.0'
-source 'dkr'
+source "#{Chef::Config['chef_repo_path']}/dkr"
 action :build_if_missing
 end
 
