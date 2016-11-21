@@ -33,3 +33,25 @@ After is finished, open the browser on your host to:
 http://<host_IP>:8000
 
 That's it!
+
+Note1: the app is using Chef to deploy everything, the test was not very clear, it would have been possible to build everything in order to deploy the whole app under Docker, but it seems a bit overkill to me, plus I believe this solution is more elegant.
+
+Note2: the query extract just the values of: 'last_name', 'first_name' and 'emp_no'. Again, the test is not very clear on this point, the "select" statement can be easily changed inside the app.py file (and the docker image rebuilt) to get different results:
+
+mysql> desc employees;
++------------+---------------+------+-----+---------+-------+
+| Field      | Type          | Null | Key | Default | Extra |
++------------+---------------+------+-----+---------+-------+
+| emp_no     | int(11)       | NO   | PRI | NULL    |       |
+| birth_date | date          | NO   |     | NULL    |       |
+| first_name | varchar(14)   | NO   |     | NULL    |       |
+| last_name  | varchar(16)   | NO   |     | NULL    |       |
+| gender     | enum('M','F') | NO   |     | NULL    |       |
+| hire_date  | date          | NO   |     | NULL    |       |
++------------+---------------+------+-----+---------+-------+
+6 rows in set (0.01 sec)
+
+Note3: having the passwd in clear for the mysql user is not that great, anyway it got just the select grants and can connect only from localhost, so it's not a big issue I believe.
+
+
+FILES:

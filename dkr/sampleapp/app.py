@@ -14,7 +14,7 @@ def db():
 
     cursor = db.cursor()
 
-    cursor.execute("select  last_name,first_name,emp_no  from employees.employees where birth_date='1965-02-01' and gender='M' and hire_date>'1990-01-01' order by last_name;")
+    cursor.execute("select  first_name,last_name,emp_no  from employees.employees where birth_date='1965-02-01' and gender='M' and hire_date>'1990-01-01' order by last_name;")
 
     rows = []
 
