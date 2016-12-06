@@ -1,7 +1,11 @@
 # simpleapp
 Project to create a simple webapp which will extract data from a mysql db using python2.7 + uwsgi + flask and nginx inside a docker container based on ubuntu 16.04, importing a dataset from an external repo ( https://github.com/datacharmer/test_db ), everything deployed via chef-solo
 
+# Please note: due to the fact that Redhat based systems don't support anymore Mysql, the app will work only on Debian based ones at the moment.
+
 # INSTALLATION
+
+$ sudo apt-get update
 
 - Clone the repo:
 
@@ -17,13 +21,16 @@ $ vim simpleapp/solo.rb
 
 Save, then:
 
-$ sudo cp simpleapp/solo.rb /etc/chef/
+$ sudo mkdir /etc/chef && sudo cp simpleapp/solo.rb /etc/chef/
 
-- Clone the external cookbooks:
+alternatively you can specify the solo.rb path when launching chef-solo (ie chef-solo -c /root/simpleapp/solo.rb)
 
-$ cd simpleapp/cookbooks && git clone https://github.com/chef-cookbooks/mysql
+- init the submodules:
 
-$ git clone https://github.com/chef-cookbooks/docker
+$ cd simpleapp
+
+$ git submodule init
+$ git submodule update
 
 - Launch Chef solo:
 
@@ -42,21 +49,21 @@ Note1: the app is using Chef to deploy everything, the test was not very clear, 
 Note2: the query extract just the values of: 'last_name', 'first_name' and 'emp_no'. Again, the test is not very clear on this point, the "select" statement can be easily changed inside the app.py file (and the docker image rebuilt) to get different results:
 
 mysql> desc employees;
-| Field      | Type          | Null | Key | Default | Extra |
+ Field      | Type          | Null | Key | Default | Extra |
 
-| emp_no     | int(11)       | NO   | PRI | NULL    |       |
-| birth_date | date          | NO   |     | NULL    |       |
-| first_name | varchar(14)   | NO   |     | NULL    |       |
-| last_name  | varchar(16)   | NO   |     | NULL    |       |
-| gender     | enum('M','F') | NO   |     | NULL    |       |
-| hire_date  | date          | NO   |     | NULL    |       |
+ emp_no     | int(11)       | NO   | PRI | NULL    |       |
+ birth_date | date          | NO   |     | NULL    |       |
+ first_name | varchar(14)   | NO   |     | NULL    |       |
+ last_name  | varchar(16)   | NO   |     | NULL    |       |
+ gender     | enum('M','F') | NO   |     | NULL    |       |
+ hire_date  | date          | NO   |     | NULL    |       |
 
 6 rows in set (0.01 sec)
 
 Note3: having the passwd in clear for the mysql user is not that great, anyway it got just the select grants and can connect only from localhost, so it's not a big issue I believe.
 
 
-# FILES:
+# files:
 
 cookbooks: it contains the cookbooks for Chef, both internal (dbset,mysqld,docker-build) and external
 
@@ -78,11 +85,11 @@ $ sudo mysql -S /run/mysql-default/mysqld.sock
 
 - to execute a shell inside the container:
 
-$ sudo docker exec -it sampleapp bash
+$ sudo docker exec -it pythonapp bash
 
 - then to commit:
 
-$ sudo docker commit sampleapp
+$ sudo docker commit pythonapp
 
 - to rebuild the image:
 
